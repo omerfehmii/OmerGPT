@@ -1,6 +1,7 @@
-# OmerGPT (tiny numpy transformer)
+# OmerGPT (tiny numpy/torch transformer)
 
-Minimal, educational GPT-style language model written in pure NumPy.
+Minimal, educational GPT-style language model written in pure NumPy,
+with an optional PyTorch training script for GPU (MPS/CUDA).
 Includes BPE tokenizer, multi-head attention, RoPE, RMSNorm, SwiGLU,
 dropout, AdamW, checkpointing, and optional chat-style datasets.
 
@@ -10,6 +11,12 @@ dropout, AdamW, checkpointing, and optional chat-style datasets.
 python3 -m venv .venv
 . .venv/bin/activate
 pip install numpy
+```
+
+Optional (PyTorch + MPS/CUDA):
+
+```bash
+pip install torch
 ```
 
 ## Data
@@ -69,6 +76,38 @@ Resume from checkpoint:
   --tokenizer bpe \
   --bpe_cache_prefix wiki_v4500 \
   --resume --ckpt_path wiki_ckpt_rms.pkl
+```
+
+## PyTorch training (MPS/CUDA)
+
+If you have Apple Silicon, use `--device mps`. `--device auto` will pick MPS/CUDA if
+available.
+
+```bash
+.venv/bin/python tiny_transformer_torch.py \
+  --data data_wikipedia.txt \
+  --tokenizer bpe \
+  --bpe_cache_prefix wiki_v4500 \
+  --n_layers 4 \
+  --d_model 128 --mlp_hidden 256 --block_size 96 --batch_size 32 --n_heads 4 \
+  --steps 15000 \
+  --lr 8e-4 --dropout 0.05 --weight_decay 0.002 \
+  --val_split 0.1 --eval_every 500 \
+  --ckpt_every 1000 --ckpt_path wiki_ckpt_torch.pt \
+  --temperature 0.7 --top_k 40 \
+  --print_every 500 --sample_every 3000 \
+  --device mps
+```
+
+Resume from checkpoint:
+
+```bash
+.venv/bin/python tiny_transformer_torch.py \
+  --data data_wikipedia.txt \
+  --tokenizer bpe \
+  --bpe_cache_prefix wiki_v4500 \
+  --resume --ckpt_path wiki_ckpt_torch.pt \
+  --device mps
 ```
 
 ## Chat / instruction data
