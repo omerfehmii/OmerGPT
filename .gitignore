@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+*.pyc
+.DS_Store
+
+data_wikipedia.txt
+*.pkl
+bpe_vocab.json
+bpe_merges.txt
+wiki_v*_vocab.json
+wiki_v*_merges.txt

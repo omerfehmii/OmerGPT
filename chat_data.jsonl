@@ -1,0 +1,29 @@
+{"instruction":"Türkiye'nin başkenti nedir?","input":"","output":"Ankara."}
+{"instruction":"İstanbul hangi iki kıtayı birleştirir?","input":"","output":"Avrupa ve Asya."}
+{"instruction":"Kısa cevap ver: Dünya'nın uydusu nedir?","input":"","output":"Ay."}
+{"instruction":"7 x 8 kaç eder?","input":"","output":"56."}
+{"instruction":"Bu cümleyi daha kibar yap: 'Bunu şimdi yap.'","input":"","output":"Bunu şimdi yapabilir misin, lütfen?"}
+{"instruction":"Aşağıdaki cümleyi tek cümlede özetle: 'Bugün hava yağmurluydu ve bu yüzden planlanan piknik iptal edildi.'","input":"","output":"Yağmur nedeniyle piknik iptal edildi."}
+{"instruction":"Kısa bir tanım yaz: Fotosentez nedir?","input":"","output":"Fotosentez, bitkilerin ışık enerjisini kullanarak besin üretmesidir."}
+{"instruction":"JSON formatında ad ve yaş alanları içeren bir örnek ver.","input":"","output":"{\"ad\":\"Ali\",\"yas\":30}"}
+{"instruction":"Bu metni daha anlaşılır yap: 'Cihaz, arızalanma ihtimaline binaen devre dışı bırakıldı.'","input":"","output":"Cihaz, arızalanma ihtimali nedeniyle kapatıldı."}
+{"instruction":"Bir cümleyle açıklama yap: Yerçekimi nedir?","input":"","output":"Yerçekimi, kütlelerin birbirini çekmesine neden olan kuvvettir."}
+{"instruction":"Kısa liste yap: Sağlıklı yaşam için 3 öneri.","input":"","output":"1) Dengeli beslen.\n2) Düzenli hareket et.\n3) Yeterli uyu."}
+{"instruction":"Aşağıdaki metni soru cümlesine çevir: 'Bugün toplantıya katılacaksın.'","input":"","output":"Bugün toplantıya katılacak mısın?"}
+{"instruction":"Kısa cevap ver: Türkiye'nin resmi dili nedir?","input":"","output":"Türkçe."}
+{"instruction":"Bu cümledeki yazım hatasını düzelt: 'Her şey çok güzeldi ve mutlu oldum.'","input":"","output":"Cümle doğru; yazım hatası yok."}
+{"instruction":"Bir cümleyle açıkla: Enflasyon nedir?","input":"","output":"Enflasyon, genel fiyat seviyesinin zaman içinde artmasıdır."}
+{"instruction":"Aşağıdaki ifadeyi daha kısa yaz: 'Bu çalışma, farklı yöntemlerin karşılaştırılması amacıyla yapılmıştır.'","input":"","output":"Bu çalışma, yöntemleri karşılaştırmak için yapılmıştır."}
+{"instruction":"Kısa cevap ver: Su kaç derecede kaynar?","input":"","output":"100°C (deniz seviyesinde)."}
+{"instruction":"Aşağıdaki metni düzenle: 'Pazartesi günü okul var ama ben gitmek istemiyorum'","input":"","output":"Pazartesi günü okul var, ama gitmek istemiyorum."}
+{"instruction":"Bir cümlelik tanım: Algoritma nedir?","input":"","output":"Algoritma, bir problemi çözmek için izlenen adımlar bütünüdür."}
+{"instruction":"Bu cümleyi resmi bir dille yaz: 'E-postanı aldım, teşekkürler.'","input":"","output":"E-postanızı aldım, teşekkür ederim."}
+{"instruction":"Kısa cevap ver: Güneş Sistemi'ndeki en büyük gezegen hangisidir?","input":"","output":"Jüpiter."}
+{"instruction":"Bir cümlelik açıklama: Bulut bilişim nedir?","input":"","output":"Bulut bilişim, bilişim kaynaklarına internet üzerinden erişim sağlamaktır."}
+{"instruction":"Bu ifadeyi daha net yap: 'Ödevini en kısa zamanda teslim et.'","input":"","output":"Ödevini mümkün olan en kısa sürede teslim et."}
+{"instruction":"Kısa cevap ver: Python nedir?","input":"","output":"Python, yüksek seviyeli bir programlama dilidir."}
+{"instruction":"Bu metni 1 cümlede özetle: 'Otobüs geciktiği için toplantıya geç kaldım.'","input":"","output":"Otobüs geciktiği için toplantıya geç kaldım."}
+{"instruction":"Kısa cevap ver: 12'nin asal çarpanları nelerdir?","input":"","output":"2 ve 3."}
+{"instruction":"Aşağıdaki cümleyi olumsuza çevir: 'Bugün spor yapıyorum.'","input":"","output":"Bugün spor yapmıyorum."}
+{"instruction":"Bir cümleyle açıklama: Yapay zeka nedir?","input":"","output":"Yapay zeka, makinelerin insan benzeri görevleri yerine getirmesini sağlayan teknikler bütünüdür."}
+{"instruction":"Kısa cevap ver: Türkiye hangi kıtadadır?","input":"","output":"Hem Avrupa hem Asya."}
