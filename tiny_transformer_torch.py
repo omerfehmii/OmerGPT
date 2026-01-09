@@ -698,48 +698,12 @@ def main():
             )
             tokenizer.save(args.bpe_vocab_path, args.bpe_merges_path)
 
-    if chat_examples is not None:
-        data, mask_data = build_chat_dataset(
-            chat_examples, tokenizer, loss_on_assistant_only
-        )
-    else:
-        data = torch.tensor(tokenizer.encode(text), dtype=torch.long)
-        mask_data = None
-
-    if len(data) < args.block_size + 2:
-        raise ValueError("data is too small for the chosen block_size")
     if args.d_model % args.n_heads != 0:
         raise ValueError("d_model must be divisible by n_heads")
     if (args.d_model // args.n_heads) % 2 != 0:
         raise ValueError("head_dim must be even for RoPE")
     if args.n_layers < 1:
         raise ValueError("n_layers must be >= 1")
-
-    if args.val_split > 0.0:
-        split_idx = int(len(data) * (1.0 - args.val_split))
-        if split_idx <= args.block_size or (len(data) - split_idx) <= args.block_size:
-            print(
-                "val_split too small for block_size; disabling validation",
-                file=sys.stderr,
-            )
-            train_data = data
-            val_data = None
-            train_mask = mask_data
-            val_mask = None
-        else:
-            train_data = data[:split_idx]
-            val_data = data[split_idx:]
-            if mask_data is not None:
-                train_mask = mask_data[:split_idx]
-                val_mask = mask_data[split_idx:]
-            else:
-                train_mask = None
-                val_mask = None
-    else:
-        train_data = data
-        val_data = None
-        train_mask = mask_data
-        val_mask = None
 
     model = TinyTransformer(
         tokenizer.vocab_size,
@@ -794,6 +758,43 @@ def main():
                 print(sample)
                 print("--------------\n")
         return
+
+    if chat_examples is not None:
+        data, mask_data = build_chat_dataset(
+            chat_examples, tokenizer, loss_on_assistant_only
+        )
+    else:
+        data = torch.tensor(tokenizer.encode(text), dtype=torch.long)
+        mask_data = None
+
+    if len(data) < args.block_size + 2:
+        raise ValueError("data is too small for the chosen block_size")
+
+    if args.val_split > 0.0:
+        split_idx = int(len(data) * (1.0 - args.val_split))
+        if split_idx <= args.block_size or (len(data) - split_idx) <= args.block_size:
+            print(
+                "val_split too small for block_size; disabling validation",
+                file=sys.stderr,
+            )
+            train_data = data
+            val_data = None
+            train_mask = mask_data
+            val_mask = None
+        else:
+            train_data = data[:split_idx]
+            val_data = data[split_idx:]
+            if mask_data is not None:
+                train_mask = mask_data[:split_idx]
+                val_mask = mask_data[split_idx:]
+            else:
+                train_mask = None
+                val_mask = None
+    else:
+        train_data = data
+        val_data = None
+        train_mask = mask_data
+        val_mask = None
 
     t0 = time.time()
     eval_every = args.eval_every if args.eval_every > 0 else args.print_every
