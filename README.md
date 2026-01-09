@@ -110,6 +110,20 @@ Resume from checkpoint:
   --device mps
 ```
 
+Generate only (no training loop):
+
+```bash
+.venv/bin/python tiny_transformer_torch.py \
+  --data data_wikipedia.txt \
+  --tokenizer bpe \
+  --bpe_cache_prefix wiki_v4500 \
+  --ckpt_path wiki_ckpt_torch.pt \
+  --generate_only \
+  --sample_len 300 --temperature 0.8 --top_k 40 \
+  --start "" \
+  --device mps
+```
+
 ## Chat / instruction data
 
 `chat_data.jsonl` supports:

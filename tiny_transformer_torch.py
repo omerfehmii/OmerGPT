@@ -597,7 +597,7 @@ def main():
     parser.add_argument("--print_every", type=int, default=100)
     parser.add_argument("--sample_every", type=int, default=500)
     parser.add_argument("--sample_len", type=int, default=200)
-    parser.add_argument("--start", type=str, default="Cengiz Han ")
+    parser.add_argument("--start", type=str, default="")
     parser.add_argument("--temperature", type=float, default=1.0)
     parser.add_argument("--top_k", type=int, default=0)
     parser.add_argument("--chat_jsonl", type=str, default="")
@@ -617,6 +617,7 @@ def main():
     parser.add_argument("--ckpt_path", type=str, default="checkpoint.pt")
     parser.add_argument("--ckpt_every", type=int, default=0)
     parser.add_argument("--resume", action="store_true")
+    parser.add_argument("--generate_only", action="store_true")
     parser.add_argument(
         "--device",
         type=str,
@@ -768,6 +769,31 @@ def main():
         start_text = normalize_text(
             start_text, nfkc=do_nfkc, turkish_lower=do_tr_lower
         )
+
+    if args.generate_only:
+        if not args.resume and os.path.exists(args.ckpt_path):
+            ckpt = torch.load(args.ckpt_path, map_location="cpu")
+            model.load_state_dict(ckpt["model"])
+        elif not os.path.exists(args.ckpt_path):
+            print("checkpoint not found; using random weights", file=sys.stderr)
+        temps = sample_temps or [args.temperature]
+        top_ks = sample_top_ks or [args.top_k]
+        for temp in temps:
+            for top_k in top_ks:
+                sample = generate(
+                    model,
+                    tokenizer,
+                    args.block_size,
+                    start_text,
+                    args.sample_len,
+                    device,
+                    temperature=temp,
+                    top_k=top_k,
+                )
+                print(f"\n--- sample (temp={temp}, top_k={top_k}) ---")
+                print(sample)
+                print("--------------\n")
+        return
 
     t0 = time.time()
     eval_every = args.eval_every if args.eval_every > 0 else args.print_every

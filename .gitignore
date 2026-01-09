@@ -5,6 +5,7 @@ __pycache__/
 
 data_wikipedia.txt
 *.pkl
+*.pt
 bpe_vocab.json
 bpe_merges.txt
 wiki_v*_vocab.json
