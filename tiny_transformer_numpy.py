@@ -6,6 +6,7 @@ import os
 import pickle
 import sys
 import time
+import unicodedata
 from collections import Counter
 
 import numpy as np
@@ -74,6 +75,19 @@ def dropout_backward(dout, mask):
     if mask is None:
         return dout
     return dout * mask
+
+
+def normalize_text(text, nfkc=True, turkish_lower=False):
+    if text is None:
+        return ""
+    if nfkc:
+        text = unicodedata.normalize("NFKC", text)
+    text = text.replace("I\u0307", "\u0130")
+    if turkish_lower:
+        text = text.replace("I", "\u0131").replace("\u0130", "i")
+        text = text.lower()
+        text = text.replace("i\u0307", "i")
+    return text
 
 
 def layernorm_forward(x, gamma, beta, eps=1e-5):
@@ -829,6 +843,15 @@ def load_chat_examples(path, system_default):
     return examples
 
 
+def normalize_chat_examples(examples, nfkc=True, turkish_lower=False):
+    for messages in examples:
+        for msg in messages:
+            msg["content"] = normalize_text(
+                msg.get("content", ""), nfkc=nfkc, turkish_lower=turkish_lower
+            )
+    return examples
+
+
 def build_chat_dataset(examples, tokenizer, loss_on_assistant_only):
     data = []
     mask = []
@@ -941,17 +964,38 @@ def main():
     parser.add_argument("--ckpt_path", type=str, default="checkpoint.pkl")
     parser.add_argument("--ckpt_every", type=int, default=0)
     parser.add_argument("--resume", action="store_true")
+    parser.add_argument(
+        "--no_unicode_normalize",
+        action="store_true",
+        help="disable NFKC normalization on input text",
+    )
+    parser.add_argument(
+        "--no_turkish_lower",
+        action="store_true",
+        help="disable Turkish-aware lowercasing",
+    )
     args = parser.parse_args()
 
     set_seed(args.seed)
     text = load_text(args.data)
+    do_nfkc = not args.no_unicode_normalize
+    do_tr_lower = not args.no_turkish_lower
+    if do_nfkc or do_tr_lower:
+        text = normalize_text(text, nfkc=do_nfkc, turkish_lower=do_tr_lower)
     chat_examples = None
     loss_on_assistant_only = False
     special_tokens = []
     if args.chat_jsonl:
         if args.tokenizer != "bpe":
             raise ValueError("chat_jsonl requires --tokenizer bpe")
-        chat_examples = load_chat_examples(args.chat_jsonl, args.system_prompt)
+        system_prompt = normalize_text(
+            args.system_prompt, nfkc=do_nfkc, turkish_lower=do_tr_lower
+        )
+        chat_examples = load_chat_examples(args.chat_jsonl, system_prompt)
+        if do_nfkc or do_tr_lower:
+            chat_examples = normalize_chat_examples(
+                chat_examples, nfkc=do_nfkc, turkish_lower=do_tr_lower
+            )
         parts = []
         for messages in chat_examples:
             for msg in messages:
@@ -1079,6 +1123,11 @@ def main():
 
     sample_temps = parse_csv_floats(args.sample_temps)
     sample_top_ks = parse_csv_ints(args.sample_top_ks)
+    start_text = args.start
+    if do_nfkc or do_tr_lower:
+        start_text = normalize_text(
+            start_text, nfkc=do_nfkc, turkish_lower=do_tr_lower
+        )
 
     t0 = time.time()
     eval_every = args.eval_every if args.eval_every > 0 else args.print_every
@@ -1127,7 +1176,7 @@ def main():
                         params,
                         tokenizer,
                         args.block_size,
-                        args.start,
+                        start_text,
                         args.sample_len,
                         args.n_heads,
                         args.n_layers,
